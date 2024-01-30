@@ -4,6 +4,7 @@ package internal
 type ServiceCustomer interface {
 	// FindAll returns all customers
 	FindAll() (c []Customer, err error)
+	GetTopCustomers() ([]TopCustomer, error)
 	// Save saves a customer
 	Save(c *Customer) (err error)
 }

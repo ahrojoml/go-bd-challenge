@@ -17,6 +17,10 @@ type CustomersMySQL struct {
 	db *sql.DB
 }
 
+const (
+	GetTopCustomersQuery = "SELECT c.`id`, c.`first_name`, c.`last_name`, SUM(i.`total`) AS amount FROM customers AS c INNER JOIN invoices AS i ON c.`id` = i.`customer_id` GROUP BY c.`id` ORDER BY amount DESC LIMIT 5"
+)
+
 // FindAll returns all customers from the database.
 func (r *CustomersMySQL) FindAll() (c []internal.Customer, err error) {
 	// execute the query
@@ -66,4 +70,24 @@ func (r *CustomersMySQL) Save(c *internal.Customer) (err error) {
 	(*c).Id = int(id)
 
 	return
+}
+
+func (c *CustomersMySQL) GetTopCustomers() ([]internal.TopCustomer, error) {
+	rows, err := c.db.Query(GetTopCustomersQuery)
+	if err != nil {
+		return nil, err
+	}
+
+	topCustomers := []internal.TopCustomer{}
+	for rows.Next() {
+		var tc internal.TopCustomer
+		err := rows.Scan(&tc.Id, &tc.FirstName, &tc.LastName, &tc.Amount)
+		if err != nil {
+			return nil, err
+		}
+
+		topCustomers = append(topCustomers, tc)
+	}
+
+	return topCustomers, nil
 }

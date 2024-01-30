@@ -17,3 +17,10 @@ type Customer struct {
 	// CustomerAttributes is the attributes of the customer.
 	CustomerAttributes
 }
+
+type TopCustomer struct {
+	Id        int
+	FirstName string
+	LastName  string
+	Amount    float64
+}

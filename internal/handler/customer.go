@@ -1,8 +1,10 @@
 package handler
 
 import (
+	"fmt"
 	"log"
 	"net/http"
+	"strconv"
 
 	"app/internal"
 	"app/platform/web/request"
@@ -27,6 +29,7 @@ type CustomerJSON struct {
 	LastName  string `json:"last_name"`
 	Condition int    `json:"condition"`
 }
+
 // GetAll returns all customers
 func (h *CustomersDefault) GetAll() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
@@ -65,6 +68,7 @@ type RequestBodyCustomer struct {
 	LastName  string `json:"last_name"`
 	Condition int    `json:"condition"`
 }
+
 // Create creates a new customer
 func (h *CustomersDefault) Create() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
@@ -104,6 +108,39 @@ func (h *CustomersDefault) Create() http.HandlerFunc {
 		response.JSON(w, http.StatusCreated, map[string]any{
 			"message": "customer created",
 			"data":    cs,
+		})
+	}
+}
+
+type TopCustomerJSON struct {
+	Id        int     `json:"id"`
+	FirstName string  `json:"first_name"`
+	LastName  string  `json:"last_name"`
+	Amount    float64 `json:"amount"`
+}
+
+func (h *CustomersDefault) GetTopCustomers() http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		topCustomers, err := h.sv.GetTopCustomers()
+		if err != nil {
+			response.Error(w, http.StatusInternalServerError, "internal server error")
+			return
+		}
+
+		data := make([]TopCustomerJSON, 0, len(topCustomers))
+		for _, v := range topCustomers {
+			totalRounded, _ := strconv.ParseFloat(fmt.Sprintf("%.2f", v.Amount), 64)
+
+			data = append(data, TopCustomerJSON{
+				Id:        v.Id,
+				FirstName: v.FirstName,
+				LastName:  v.LastName,
+				Amount:    totalRounded,
+			})
+		}
+
+		response.JSON(w, http.StatusOK, map[string]any{
+			"data": data,
 		})
 	}
 }

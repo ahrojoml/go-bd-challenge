@@ -4,6 +4,7 @@ package internal
 type RepositoryCustomer interface {
 	// FindAll returns all customers saved in the database.
 	FindAll() (c []Customer, err error)
+	GetTopCustomers() ([]TopCustomer, error)
 	// Save saves a customer into the database.
 	Save(c *Customer) (err error)
 }
