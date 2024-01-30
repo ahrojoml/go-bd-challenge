@@ -1,0 +1,5 @@
+SERVER_PASSWD = "123"
+CUSTOMER_PATH = "./docs/db/json/customers.json"
+INVOICE_PATH = "./docs/db/json/invoices.json"
+PRODUCT_PATH = "./docs/db/json/products.json"
+SALE_PATH = "./docs/db/json/sales.json"
