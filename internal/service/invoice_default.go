@@ -28,3 +28,7 @@ func (s *InvoicesDefault) Save(i *internal.Invoice) (err error) {
 func (s *InvoicesDefault) UpdateInvoicesTotal() error {
 	return s.rp.UpdateInvoicesTotal()
 }
+
+func (s *InvoicesDefault) GetInvoicesTotalByCustomerCondition() ([]internal.InvoiceTotalByCustomerCondition, error) {
+	return s.rp.GetInvoicesTotalByCustomerCondition()
+}

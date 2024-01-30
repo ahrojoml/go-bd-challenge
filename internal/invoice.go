@@ -17,3 +17,8 @@ type Invoice struct {
 	// InvoiceAttributes is the attributes of the invoice.
 	InvoiceAttributes
 }
+
+type InvoiceTotalByCustomerCondition struct {
+	Condition int
+	Total     float64
+}

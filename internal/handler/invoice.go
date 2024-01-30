@@ -1,7 +1,9 @@
 package handler
 
 import (
+	"fmt"
 	"net/http"
+	"strconv"
 
 	"app/internal"
 	"app/platform/web/request"
@@ -118,6 +120,34 @@ func (h *InvoicesDefault) UpdateInvoicesTotal() http.HandlerFunc {
 
 		response.JSON(w, http.StatusOK, map[string]any{
 			"message": "invoices total updated",
+		})
+	}
+}
+
+type InvoiceTotalByCustomerConditionJSON struct {
+	Condition int     `json:"condition"`
+	Total     float64 `json:"total"`
+}
+
+func (h *InvoicesDefault) InvoicesTotalByCondition() http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		invoiceTotalByCustomerCondition, err := h.sv.GetInvoicesTotalByCustomerCondition()
+		if err != nil {
+			response.Error(w, http.StatusInternalServerError, "internal server error")
+			return
+		}
+
+		data := make([]InvoiceTotalByCustomerConditionJSON, 0, len(invoiceTotalByCustomerCondition))
+		for _, invoceTotal := range invoiceTotalByCustomerCondition {
+			totalRounded, _ := strconv.ParseFloat(fmt.Sprintf("%.2f", invoceTotal.Total), 64)
+			data = append(data, InvoiceTotalByCustomerConditionJSON{
+				Condition: invoceTotal.Condition,
+				Total:     totalRounded,
+			})
+		}
+
+		response.JSON(w, http.StatusOK, map[string]any{
+			"data": data,
 		})
 	}
 }

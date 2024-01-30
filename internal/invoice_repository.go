@@ -4,6 +4,7 @@ package internal
 type RepositoryInvoice interface {
 	// FindAll returns all invoices
 	FindAll() (i []Invoice, err error)
+	GetInvoicesTotalByCustomerCondition() ([]InvoiceTotalByCustomerCondition, error)
 	// Save saves an invoice
 	Save(i *Invoice) (err error)
 	UpdateInvoicesTotal() (err error)
