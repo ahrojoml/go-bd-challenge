@@ -8,7 +8,7 @@ import (
 
 const (
 	UpdateInvoicesTotalQuery                 = "UPDATE invoices AS i SET i.`total` = (SELECT SUM(s.`quantity` * p.`price`) FROM sales AS s INNER JOIN products AS p ON s.`product_id` = p.`id` WHERE i.`id` = s.`invoice_id`)"
-	GetInvoicesTotalByCustomerConditionQuery = "SELECT c.`condition`, SUM(i.`total`) FROM (customers as c INNER JOIN invoices as i) GROUP BY c.`condition`"
+	GetInvoicesTotalByCustomerConditionQuery = "SELECT c.`condition`, SUM(i.`total`) FROM (customers as c INNER JOIN invoices as i ON c.`id` = i.`customer_id`) GROUP BY c.`condition`"
 )
 
 // NewInvoicesMySQL creates new mysql repository for invoice entity.
