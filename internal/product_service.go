@@ -4,6 +4,7 @@ package internal
 type ServiceProduct interface {
 	// FindAll returns all products.
 	FindAll() (p []Product, err error)
+	GetTopProducts() ([]TopProduct, error)
 	// Save saves a product.
 	Save(p *Product) (err error)
 }

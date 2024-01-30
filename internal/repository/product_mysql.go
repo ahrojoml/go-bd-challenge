@@ -17,6 +17,10 @@ type ProductsMySQL struct {
 	db *sql.DB
 }
 
+const (
+	TopProductsQuery = "SELECT p.`id`, p.`description`, SUM(s.`quantity`) as sold FROM products as p INNER JOIN sales as s ON p.`id` = s.`product_id` GROUP BY p.`id` ORDER BY sold DESC LIMIT 5"
+)
+
 // FindAll returns all products from the database.
 func (r *ProductsMySQL) FindAll() (p []internal.Product, err error) {
 	// execute the query
@@ -66,4 +70,25 @@ func (r *ProductsMySQL) Save(p *internal.Product) (err error) {
 	(*p).Id = int(id)
 
 	return
+}
+
+func (r *ProductsMySQL) GetTopProducts() ([]internal.TopProduct, error) {
+	rows, err := r.db.Query(TopProductsQuery)
+	if err != nil {
+		return nil, err
+	}
+
+	topProducts := []internal.TopProduct{}
+	for rows.Next() {
+		var tp internal.TopProduct
+
+		err := rows.Scan(&tp.Id, &tp.Description, &tp.Total)
+		if err != nil {
+			return nil, err
+		}
+
+		topProducts = append(topProducts, tp)
+	}
+
+	return topProducts, nil
 }

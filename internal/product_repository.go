@@ -4,6 +4,7 @@ package internal
 type RepositoryProduct interface {
 	// FindAll returns all products saved in the database.
 	FindAll() (p []Product, err error)
+	GetTopProducts() ([]TopProduct, error)
 	// Save saves a product into the database.
 	Save(p *Product) (err error)
 }

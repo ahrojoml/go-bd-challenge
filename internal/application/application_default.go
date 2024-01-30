@@ -99,6 +99,7 @@ func (a *ApplicationDefault) SetUp() (err error) {
 	a.router.Route("/products", func(r chi.Router) {
 		// - GET /products
 		r.Get("/", hdProduct.GetAll())
+		r.Get("/topSeller", hdProduct.GetTopProducts())
 		// - POST /products
 		r.Post("/", hdProduct.Create())
 	})
