@@ -26,6 +26,7 @@ type InvoiceJSON struct {
 	Total      float64 `json:"total"`
 	CustomerId int     `json:"customer_id"`
 }
+
 // GetAll returns all invoices
 func (h *InvoicesDefault) GetAll() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
@@ -63,6 +64,7 @@ type RequestBodyInvoice struct {
 	Total      float64 `json:"total"`
 	CustomerId int     `json:"customer_id"`
 }
+
 // Create creates a new invoice
 func (h *InvoicesDefault) Create() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
@@ -102,6 +104,20 @@ func (h *InvoicesDefault) Create() http.HandlerFunc {
 		response.JSON(w, http.StatusOK, map[string]any{
 			"message": "invoice created",
 			"data":    iv,
+		})
+	}
+}
+
+func (h *InvoicesDefault) UpdateInvoicesTotal() http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		err := h.sv.UpdateInvoicesTotal()
+		if err != nil {
+			response.Error(w, http.StatusInternalServerError, "internal server error")
+			return
+		}
+
+		response.JSON(w, http.StatusOK, map[string]any{
+			"message": "invoices total updated",
 		})
 	}
 }

@@ -6,4 +6,5 @@ type ServiceInvoice interface {
 	FindAll() (i []Invoice, err error)
 	// Save saves an invoice
 	Save(i *Invoice) (err error)
+	UpdateInvoicesTotal() (err error)
 }

@@ -24,3 +24,7 @@ func (s *InvoicesDefault) Save(i *internal.Invoice) (err error) {
 	err = s.rp.Save(i)
 	return
 }
+
+func (s *InvoicesDefault) UpdateInvoicesTotal() error {
+	return s.rp.UpdateInvoicesTotal()
+}

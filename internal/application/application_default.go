@@ -24,7 +24,7 @@ type ConfigApplicationDefault struct {
 func NewApplicationDefault(config *ConfigApplicationDefault) *ApplicationDefault {
 	// default values
 	defaultCfg := &ConfigApplicationDefault{
-		Db:      nil,
+		Db:   nil,
 		Addr: ":8080",
 	}
 	if config != nil {
@@ -37,7 +37,7 @@ func NewApplicationDefault(config *ConfigApplicationDefault) *ApplicationDefault
 	}
 
 	return &ApplicationDefault{
-		cfgDb:      defaultCfg.Db,
+		cfgDb:   defaultCfg.Db,
 		cfgAddr: defaultCfg.Addr,
 	}
 }
@@ -107,6 +107,7 @@ func (a *ApplicationDefault) SetUp() (err error) {
 		r.Get("/", hdInvoice.GetAll())
 		// - POST /invoices
 		r.Post("/", hdInvoice.Create())
+		r.Get("/update_total", hdInvoice.UpdateInvoicesTotal())
 	})
 	a.router.Route("/sales", func(r chi.Router) {
 		// - GET /sales

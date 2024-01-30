@@ -6,6 +6,10 @@ import (
 	"app/internal"
 )
 
+const (
+	UpdateInvoicesTotalQuery = "UPDATE invoices AS i SET i.`total` = (SELECT SUM(s.`quantity` * p.`price`) FROM sales AS s INNER JOIN products AS p ON s.`product_id` = p.`id` WHERE i.`id` = s.`invoice_id`)"
+)
+
 // NewInvoicesMySQL creates new mysql repository for invoice entity.
 func NewInvoicesMySQL(db *sql.DB) *InvoicesMySQL {
 	return &InvoicesMySQL{db}
@@ -66,4 +70,12 @@ func (r *InvoicesMySQL) Save(i *internal.Invoice) (err error) {
 	(*i).Id = int(id)
 
 	return
+}
+
+func (r *InvoicesMySQL) UpdateInvoicesTotal() error {
+	_, err := r.db.Exec(UpdateInvoicesTotalQuery)
+	if err != nil {
+		return err
+	}
+	return nil
 }
